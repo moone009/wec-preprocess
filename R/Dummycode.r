@@ -1,5 +1,5 @@
 
-DummyCode <- function (df,DummyColumns) {
+DummyCode <- function (df,DummyColumns,dropcols) {
   
   # Create a copy of original dataset
   FileToDummyCode = df
@@ -20,6 +20,9 @@ DummyCode <- function (df,DummyColumns) {
     df = cbind(df,Table)                            
     
   }
-  return(df)
+  if(dropcols == T){
+  return(df[,-c(which(colnames(df) %in% DummyColumns))] )
+  }else{  return(df)}
+  
 }
 

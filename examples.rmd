@@ -1,0 +1,74 @@
+---
+title: "Examples"
+author: "Christopher M"
+date: "Tuesday, May 24, 2016"
+output: html_document
+---
+
+This package was created to provide analysts with functions that are useful relative to the data within the enterpise. 
+
+[changeclass](#changeclass)
+[Dummycode](#Dummycode)
+[Kfold](#Kfold)
+[preprocess](#preprocess)
+[SummaryStats](#SummaryStats)
+
+
+
+```{r, echo=FALSE}
+for (f in list.files("F:\\R_Project_wec-preprocess\\R\\") ) {
+    if(!f %in% c('Model Wrapper.r')){
+    source(paste("F:\\R_Project_wec-preprocess\\R\\",f,sep=''))
+    }
+}
+```
+
+#changeclass
+### This function was designed to convert variables to their most likely column class.
+
+```{r}
+df = data.frame(point1 = rnorm(1000,1,0),point2 = rnorm(1000,1,100),point3 = rnorm(1000,1,100),point4 = rnorm(1000,1,100))
+df$point1 = as.character(df$point1)
+df$point2 = as.numeric(df$point2)
+df$point3 = as.factor(df$point3)
+df$point4 = as.character(df$point4)
+str(df)
+head(df)
+```
+
+### Now we can call our changeclass function 
+```{r}
+df <- changeclass(df)
+str(df)
+head(df)
+```
+
+### If we have less than 100 rows the function will exit 
+
+```{r}
+df = data.frame(point1 = rnorm(31,1,0),point2 = rnorm(31,1,100),point3 = rnorm(31,1,100),point4 = rnorm(31,1,100))
+df <- changeclass(df)
+```
+
+#Dummycode
+### There are many functions our there to dummy code but this function is very intuitive and fast enough for datasets < 100 million.
+
+### We can state whether we want to keep or drop our columns that will be dummy coded
+```{r}
+df = DummyCode(mtcars,c('carb','am'),F)
+head(df)
+```
+
+```{r}
+df = DummyCode(mtcars,c('carb','am'),T)
+head(df)
+```
+
+#SummaryStats
+```{r}
+require(MASS)
+data <- df_stats(Boston)
+data 
+```
+
+ 

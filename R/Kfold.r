@@ -1,5 +1,4 @@
 
-
 kfold <- function(df,k){
   require(sqldf)
   if( length(which(colnames(df)=='folds'))>0){
