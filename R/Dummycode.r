@@ -14,7 +14,7 @@ DummyCode <- function (df,DummyColumns) {
     Table=as.data.frame.matrix(table(FileToDummyCode$ByVarID,FileToDummyCode[,DummyColumns[i]]))
     
     # rename our columns
-    colnames(Table) = paste(DummyColumns[i],'-',colnames(Table),sep='')
+    colnames(Table) = paste(DummyColumns[i],'.',colnames(Table),sep='')
     
     # bind data back to original dataset
     df = cbind(df,Table)                            

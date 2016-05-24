@@ -12,21 +12,24 @@ preprocess <- function(df,target,columns,dimension.reduction=F,Missing=F){
   
   # Hold to bind after preprocssing
   response <- df[,target]
+  df[,target] <- NULL
   
   ##______________________________________________________________________________________________________
   #Impute Missing Values
   if(Missing ==T){
-  df <- missForest(df[,columns],ntree=250)
-  df <- df$ximp
-  
-  cat("\n")
-  cat("\n")
+    df <- missForest(df[,columns],ntree=250)
+    df <- df$ximp
+    
+    cat("\n")
+    cat("\n")
   }
   
   
   ##______________________________________________________________________________________________________
   #Check for duplicate columns  
   skip <- c()
+  names <- colnames(df)
+  holder <- data.frame()
   for(i in 1:length(names)){
     
     check <- names[-c(i)]
@@ -64,12 +67,13 @@ preprocess <- function(df,target,columns,dimension.reduction=F,Missing=F){
   
   ##______________________________________________________________________________________________________
   # Correlated Variables
-  numeric.vars <- names(which(sapply(df,class) == 'numeric'))
-  
+  numeric.vars <- names(which(sapply(df,class) == 'integer'))
+  numeric.vars <- c(numeric.vars,names(which(sapply(df,class) == 'numeric')))
+  ## which(abs(descrCor[1,]) > .85 & abs(descrCor[1,]) != 1)
   descrCor <- cor(df[,numeric.vars])
-  highlyCorDescr <- findCorrelation(descrCor, cutoff = .9)
+  highlyCorDescr <- findCorrelation(descrCor, cutoff = .95)
   if(length(highlyCorDescr) > 0){
-    print('Highly correlated variables found and removed')
+    print(paste('following variable is highly correlated and will be removed:',colnames(df)[highlyCorDescr],sep=''))
     cat("\n")
     cat("\n")
     df <- df[,-highlyCorDescr]
@@ -87,7 +91,9 @@ preprocess <- function(df,target,columns,dimension.reduction=F,Missing=F){
   
   ##______________________________________________________________________________________________________
   # skewed Variables
-  numeric.vars <- names(which(sapply(df,class) == 'numeric'))
+  numeric.vars <- names(which(sapply(df,class) == 'integer'))
+  numeric.vars <- c(numeric.vars,names(which(sapply(df,class) == 'numeric')))
+  
   scale.vars <- which(apply(df[,numeric.vars],2,kurtosis) > 5)
   check_these_vars <- which(apply(df[,numeric.vars],2,kurtosis) < 1) 
   if(length(check_these_vars)>0){
@@ -99,12 +105,12 @@ preprocess <- function(df,target,columns,dimension.reduction=F,Missing=F){
   ##______________________________________________________________________________________________________
   # Dimension Reduction
   if(dimension.reduction==T){
-    preProcValues <- preProcess(df, method = c("BoxCox", "center","scale", "pca"))
-    df <- predict(preProcValues, df)
+    preProcValues <- preProcess(df[,numeric.vars], method = c("BoxCox", "center","scale", "pca"))
+    dfd <- predict(preProcValues, df[,numeric.vars])
+    df <- cbind(df[,-c(which(colnames(df) %in% numeric.vars))],dfd)
   }
   df <-cbind(df,response)
-  colnames(df)[length(df)] <- target
-  
   
   return(df)
 }
+

@@ -1,4 +1,3 @@
-
 css_date <- function(x,date){
   require(stringr)
   mons <- c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
