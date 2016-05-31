@@ -1,8 +1,11 @@
 df_stats <-function(df){
+   
+  source("./R/changeclass.r")
   require(data.table)
   require(reshape2)
   require(dplyr)
   
+  df <- changeclass(df)
   numeric.vars <- names(which(sapply(df,class) == 'integer'))
   numeric.vars <- c(numeric.vars,names(which(sapply(df,class) == 'numeric')))
   df <- df[,numeric.vars]
@@ -20,7 +23,7 @@ df_stats <-function(df){
     
     col <- paste(colnames(df)[i],"_Z_Score",sep='')
     df[col]<- (df[i]-mean(df[,i]))/sd(df[,i])
-    Z_Scores <- length(which(df[col]  < -3 ) ) +  length(which(df[col]  > 3) )
+    Z_Scores <- length(which(df[col]  < -5 ) ) +  length(which(df[col]  > 5) )
     df[col]<- NULL
     data <- data.frame(Col = colnames(df)[i],Zscore = Z_Scores)
     collection <- rbind(collection,data)

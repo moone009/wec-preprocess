@@ -8,14 +8,26 @@ output: html_document
 This package was created to provide analysts with functions that are useful relative to the data within the enterpise. 
 
 [changeclass](#changeclass)
+
 [Dummycode](#Dummycode)
-[Kfold](#Kfold)
+
+[kfold](#kfold)
+
+[imputer](#imputer)
+
 [preprocess](#preprocess)
+
 [SummaryStats](#SummaryStats)
 
+[StaticMissingVars](#StaticMissingVars)
+
+[parallelApply](#parallelApply)
+
+[trim](#trim)
 
 
 ```{r, echo=FALSE}
+require(MASS)
 for (f in list.files("F:\\R_Project_wec-preprocess\\R\\") ) {
     if(!f %in% c('Model Wrapper.r')){
     source(paste("F:\\R_Project_wec-preprocess\\R\\",f,sep=''))
@@ -51,9 +63,8 @@ df <- changeclass(df)
 ```
 
 #Dummycode
-### There are many functions our there to dummy code but this function is very intuitive and fast enough for datasets < 100 million.
-
-### We can state whether we want to keep or drop our columns that will be dummy coded
+* There are many functions our there to dummy code but this function is very intuitive and fast enough for datasets < 100 million.
+* We can state whether we want to keep or drop our columns that will be dummy coded
 ```{r}
 df = DummyCode(mtcars,c('carb','am'),F)
 head(df)
@@ -64,11 +75,94 @@ df = DummyCode(mtcars,c('carb','am'),T)
 head(df)
 ```
 
-#SummaryStats
+#kfold
+* Typically we use kfold for partitioning data for cross validating models as well as an index for parallel functions
 ```{r}
-require(MASS)
-data <- df_stats(Boston)
+iris = suppressMessages(kfold(iris,3))
+table(iris$Species,iris$folds)
+```
+
+#imputer
+* The imputer accepts a data frame and whichever column needs to be imputed and then you specify between the following: mean,median,regression
+* The imputer will output which method was selected along with the method that it believes is best based upon RMSE. 
+```{r}
+df = Boston
+df[,1][c(1,6,8,12,66,77,88,101,303)] <- NA
+
+imputed.df <- impute(df,1,F,F,T)
+imputed.df <- impute(df,1,F,T,F)
+imputed.df <- impute(df,1,T,F,F)
+```
+
+
+#SummaryStats
+* FiveRepresent: This means 5 uniqe values represent x amount of the data in that variable
+* Zscore: This is used for outlier detection, I have it set to display a +5 or -5 standard deviations 
+* This function also calls the changeclass function
+```{r}
+data <- suppressMessages(df_stats(Boston))
 data 
 ```
 
+#StaticMissingVars
+* This will function do the following
+* Drop any column that has more than 75% of its data missing
+* Drop any column that is 95% or more static
+* Warn you of any column that is 80-94% static
+
+```{r}
+df <- data.frame(ID = 1:100,X = rnorm(100),X2 = rnorm(100),X3 = rnorm(100),D3 = 2,Y = rnorm(100),Output = 1,Volume=4)
+df[,2][c(1:75)] <- NA
+df[,7][c(1:96)] <- 3
+df[,5][c(1:85)] <- 3
+df <- Static_Missing_Vars(df) 
+```
+
+#parallelApply 
+* All of the workstations we use have 8 cores. However we set this to use only 5 of the cores 
+* This function essentially works as a a wrapper. You impute the dataframe, function, and number of parameters (Currently the limit is two)
+
+```{r,warning=FALSE}
+p.func <- function(x){
+  if(x > 2){"big"
+  }else if(x == 1){"Thats random"
+  }else{"Hello"}
+}
+
+df <- data.frame(id = rnorm(10000))
+df <- suppressMessages(parallelApply(df,1,p.func,1))
+table(df$ParRow)
+
+```
+ 
+## Example with two parameters 
+```{r,warning=FALSE}
+m.func <- function(x,y){
+  if(x > 20 & y > 200){"big"
+  }else if(x < 20 & y > 188){"Thats random"
+  }else{"Hello"}
+}
+
+df <- data.frame(id = rnorm(10000,mean = 18,sd = 10),x =rnorm(10000), y = rnorm(10000,mean = 200,sd = 60))
+df <- suppressMessages(parallelApply(df,c(1,3),m.func,2))
+table(df$ParRow)
+
+```
+ 
+#trim
+
+* we a have a lot of free form text in our contact data with odd spacing
+
+* the function is using the str_trim from stringr along with multiple gsub statements removing whitespace
+```{r}
+sentence <- "It    is a beautiful    day, let us go to the        park for a    picinic "
+trim(sentence)
+```
+
+
+ 
+ 
+ 
+ 
+ 
  

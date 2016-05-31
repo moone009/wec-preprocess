@@ -7,15 +7,19 @@ Static_Missing_Vars <- function(df) {
     Cases = table(df[colnames(df)[i]])
     Cases = sort(Cases,decreasing=T)
     
-    # Drop Variables that are > 95% missing
-    if(sum(is.na(df[colnames(df)[i]]))/nrow(df) >.95)
+    # Drop Variables that are > 75% missing
+    if(sum(is.na(df[colnames(df)[i]]))/nrow(df) >=.75)
     {
-      list = c(list , c=colnames(df)[i])
+      Percent = round(sum(is.na(df[colnames(df)[i]]))/nrow(df),2)
+      if(Percent ==1){Percent ='100'}
+      list = c(list , paste(Percent,"% of the data is NA in variable: ",colnames(df)[i],sep=''))
     }
     # Drop variables that are close to static (Warning sometimes the minroity help explain variance)  
     else if(Cases[1]/nrow(df)>.95)
     {
-      list = c(list , c=colnames(df)[i])     
+      Percent = round(Cases[1]/nrow(df),2)
+      if(Percent ==1){Percent ='100'}
+      list = c(list , paste(Percent,"% of the data is Static in variable: ",colnames(df)[i],sep=''))
     }
     else if(Cases[1]/nrow(df)>.8)
     {
