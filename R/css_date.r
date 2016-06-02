@@ -3,18 +3,27 @@ css_date <- function(x,date){
   mons <- c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
   
   if(date == T){
-  as.Date(substr(x,1,11),format="%b %d %Y")
+    as.Date(substr(x,1,11),format="%b %d %Y")
   }else{
+    if(substr(x,25,26)=="PM"){add = 12}else{add = 0}
     mon  <- str_pad(which(substr(x,1,3)==mons), 2, pad = "0")
     year <- substr(x,8,11)
     day  <- str_pad(substr(x,5,6), 2, pad = "0")
-    return(paste(year,mon,day,sep=''))
+    hour  <- as.numeric(str_pad(substr(x,13,14), 2, pad = "0"))+add
+    min  <- str_pad(substr(x,16,17), 2, pad = "0")
+    sec  <- str_pad(substr(x,19,20), 2, pad = "0")
+    ms  <- str_pad(substr(x,22,24), 3, pad = "0")
+    
+    return(paste(year,mon,day,hour,min,sec,ms,sep=''))
   }
   
 }
 
 
-x = 'Mar 22 2014 12:00:00:000AM'
+
+x = 'Jul 24 2015 09:24:23:403AM'
+x = 'Jul 24 2015 01:14:55:803PM'
+
 css_date(x,T)
 css_date(x,F)
 
