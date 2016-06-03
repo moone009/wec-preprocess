@@ -30,7 +30,7 @@ results = as.matrix(results)
 ClassificationPerf(results,T)
 
 ClassificationPerf <- function(results,explanation){
-print("Please make sure you inputed Actual by Predictions: table(Iris$Species,Predicted$Species)")
+  print("Please make sure you inputed Actual by Predictions: table(Iris$Species,Predicted$Species) \n Also, please make sure factor levels are the same")
   
 classes <- length(diag(results))
 performance <- data.frame()
