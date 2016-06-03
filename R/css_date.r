@@ -1,3 +1,14 @@
+###############################################################################################################################
+# Name             :  css_date 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed to manipulate dates from css 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
+
 css_date <- function(x,date){
   require(stringr)
   mons <- c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')

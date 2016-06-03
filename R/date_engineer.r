@@ -1,3 +1,14 @@
+###############################################################################################################################
+# Name             :  date_engineer 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed to feature engineer dates 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
+
 date_engineer <- function(data,col,holiday){
   require(lubridate)
   data[paste(col,'_mon',sep='')] = month(data[[col]])

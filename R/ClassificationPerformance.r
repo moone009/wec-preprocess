@@ -1,33 +1,14 @@
+###############################################################################################################################
+# Name             :  ClassificationPerformance 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed to compute classification performance methods 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
 
-
-mod = randomForest(Species~.,iris[c(1:5,45:60,90:120),])
-results = predict(mod,iris)
-Analyze = data.frame(Actual = as.character(iris$Species),Pred = as.character(results))
-results = table(iris$Species,results)
-results = as.matrix(results)
-
-ClassificationPerf(results,T)
-
-mod = randomForest(as.factor(cyl)~.,mtcars)
-results = predict(mod,mtcars)
-results = table(mtcars$cyl,results)
-results = as.matrix(results)
- 
-ClassificationPerf(results)
-
-mod = randomForest(as.factor(rad)~.,Boston[ sample(1:506, 200, replace=T),])
-results = predict(mod,Boston)
-results = table(Boston$rad,results)
-results = as.matrix(results)
-
-ClassificationPerf(results)
-
-results = table(results,Boston$rad)
-results = as.matrix(results)
-
-
-
-ClassificationPerf(results,T)
 
 ClassificationPerf <- function(results,explanation){
   print("Please make sure you inputed Actual by Predictions: table(Iris$Species,Predicted$Species) \n Also, please make sure factor levels are the same")
@@ -86,3 +67,32 @@ return(performance)
 
 
 
+
+mod = randomForest(Species~.,iris[c(1:5,45:60,90:120),])
+results = predict(mod,iris)
+Analyze = data.frame(Actual = as.character(iris$Species),Pred = as.character(results))
+results = table(iris$Species,results)
+results = as.matrix(results)
+
+ClassificationPerf(results,T)
+
+mod = randomForest(as.factor(cyl)~.,mtcars)
+results = predict(mod,mtcars)
+results = table(mtcars$cyl,results)
+results = as.matrix(results)
+
+ClassificationPerf(results)
+
+mod = randomForest(as.factor(rad)~.,Boston[ sample(1:506, 200, replace=T),])
+results = predict(mod,Boston)
+results = table(Boston$rad,results)
+results = as.matrix(results)
+
+ClassificationPerf(results)
+
+results = table(results,Boston$rad)
+results = as.matrix(results)
+
+
+
+ClassificationPerf(results,T)

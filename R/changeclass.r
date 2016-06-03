@@ -1,3 +1,14 @@
+###############################################################################################################################
+# Name             :  ChangeClass 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed to best estimate appropriae column classes 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
+
 changeclass <- function(df){
   
   for(z in 1:length(colnames(df))){
