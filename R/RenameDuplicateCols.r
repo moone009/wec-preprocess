@@ -1,3 +1,13 @@
+###############################################################################################################################
+# Name             :  RenameDuplicateCols 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed to rename duplicate columns to prevent sqldf errors 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
 
 RenameDuplicateCols <- function(df){
   

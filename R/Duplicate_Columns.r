@@ -1,18 +1,27 @@
 ###############################################################################################################################
-# Name             :  trim 
-# Date             :  2016-06-03 
+# Name             :  Duplicate Columns 
+# Date             :  2016-06-06 
 # Author           :  Christopher Mooney 
 # Dept             :  Business Analytics 
-# Purpose          :  function designed to remove white space 
+# Purpose          :  function designed to remove idenctical columns 
 ###############################################################################################################################
 # ver    user        date(YYYYMMDD)        change  
-# 1.0   w47593        20160603               initial
+# 1.0   w47593        20160606               initial
 ############################################################################################################################### 
 
-trim <-  function(x){ require(stringr)
-                      x <- gsub('  ',' ',x) 
-                      x <- gsub('  ',' ',x) 
-                      x <- gsub('  ',' ',x) 
-                      x <- gsub('  ',' ',x) 
-                      x <- str_trim(x, side = c("both"))
-                      return(x)}
+
+duplicate_names <- function(x){
+  
+  cols <- which(table(colnames(x))>1)
+  removal <- c()
+  for(i in 1:length(cols)){
+    idx <-  which(colnames(x) %in% names(cols[i]))
+    if(unique(x[,idx[1]]==x[,idx[2]])==TRUE){
+    removal <- c(removal,max(idx))
+    }
+  }
+  x <- x[,-c(removal)]
+  return(x)
+}
+
+

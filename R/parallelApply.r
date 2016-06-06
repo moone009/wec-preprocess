@@ -1,3 +1,13 @@
+###############################################################################################################################
+# Name             :  ParallelApply 
+# Date             :  2016-06-03 
+# Author           :  Christopher Mooney 
+# Dept             :  Business Analytics 
+# Purpose          :  function designed as a wrapper to parallel apply functions 
+###############################################################################################################################
+# ver    user        date(YYYYMMDD)        change  
+# 1.0   w47593        20160603               initial
+############################################################################################################################### 
 
 parallelApply <- function(df,cols,func,parameters){
     
