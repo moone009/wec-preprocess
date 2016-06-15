@@ -30,5 +30,5 @@ header <- function(functionname,Author,Dept,user,Purpose){
   
 }
 
-header("trim","Christopher Mooney","Business Analytics","w47593","function designed to remove white space")
+header("RfByClassImp","Christopher Mooney","Business Analytics","w47593","function designed to show importance by class compared to all others")
 

@@ -65,7 +65,8 @@ return(performance)
 
 }
 
-
+library(randomForest)
+library(MASS)
 
 
 mod = randomForest(Species~.,iris[c(1:5,45:60,90:120),])
@@ -81,14 +82,14 @@ results = predict(mod,mtcars)
 results = table(mtcars$cyl,results)
 results = as.matrix(results)
 
-ClassificationPerf(results)
+ClassificationPerf(results,F)
 
 mod = randomForest(as.factor(rad)~.,Boston[ sample(1:506, 200, replace=T),])
 results = predict(mod,Boston)
 results = table(Boston$rad,results)
 results = as.matrix(results)
 
-ClassificationPerf(results)
+ClassificationPerf(results,F)
 
 results = table(results,Boston$rad)
 results = as.matrix(results)
