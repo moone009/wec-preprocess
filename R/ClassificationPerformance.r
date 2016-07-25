@@ -21,8 +21,8 @@ performance <- data.frame()
   NotesOne <-  paste('
   # True Positive: Number of correctly classified targets 
   # True Negative: Number of other correctly identified targets 
-  # False Positives: Other targets being misclassifed as another target. (Watermelons and apples being mistaken for oranges) 
-  # False Negatives: Target classified as belonging to another class (Target = Orange(s) mistaken as an apple and a watermelon) ')
+  # False Positives: Other targets being misclassifed as another target. (Watermelons and apples being mistaken for oranges) (Columns)
+  # False Negatives: Target classified as belonging to another class (Target = Orange(s) mistaken as an apple and a watermelon) (Rows)')
   
   TP <- diag(results)[i]
   TN <- sum(diag(results)[-i]) 

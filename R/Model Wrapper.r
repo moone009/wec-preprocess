@@ -56,11 +56,7 @@ input <- data.frame(
            ModelDept = ModelDept,
            ModelDescription = ModelDescription,
            TotalTime = End,
-           DataAcquistionUser = loadtime[1],
-           DataAcquistionSystem = loadtime[2],
            DataAcquistionElapsed = loadtime[3],
-           ModelingUser = Modeltime[1],
-           ModelingSystem = Modeltime[2],
            ModelingElapsed = Modeltime[3],
            RecordsProcessed = rc,
            PredictionsMean =  mean(Predictions),
@@ -80,6 +76,128 @@ save(linearModel, file = "linearModel.rda")
 predict(linearModel,test)
 load("linearModel.rda")
 cbind(test,data.frame(Prediction = predict(linearModel,test)))
+
+
+library(MASS)
+library(randomForest)
+
+ 
+train_ind <- sample(1:nrow(diamonds), size = floor(.6 * nrow(diamonds)))
+train <- diamonds[train_ind, ]
+test <- diamonds[-train_ind, ]
+rfModel <- randomForest(as.factor(cut)~.,train)
+save(rfModel, file = "rfModel.rda")
+  predict(rfModel,test)
+paste(mod,names(mod),collapse = ",")
+
+
+
+simple.func <- function(){
+     train_ind <- sample(1:nrow(diamonds), size = floor(.6 * nrow(diamonds)))
+     test <- diamonds[-train_ind, ]
+     return(test)
+  }
+
+
+## Load Libaries & Functions
+Start <- Sys.time()
+library(RODBC)
+
+##______________________________________________________________________________________________________
+## Model Description
+
+ModelName <- 'BEI_RandomForest'
+ModelType <- 'Classification'
+ModelLanguage <- 'R'
+ModelOwner <- 'w47593'
+ModelDept <- 'BEI'
+ModelDescription <- 'Tree model to predict diamonds'
+
+##______________________________________________________________________________________________________
+## Load Data (this should be a function that pulls all data)
+
+loadtime <- system.time(data <- simple.func())
+rc <- nrow(data)
+
+##______________________________________________________________________________________________________
+## Call Model
+
+load("rfModel.rda")
+Modeltime <- system.time(Predictions <- predict(rfModel,data))
+rpt <- paste(table(Predictions),names(table(Predictions)),collapse = ",")
+
+
+##______________________________________________________________________________________________________
+## Load Results to logging database
+
+End <- Sys.time() - Start
+
+input <- data.frame(
+  ModelType = ModelType,
+  ModelName = ModelName,
+  ModelLanguage = ModelLanguage,
+  ModelOwner = ModelOwner,
+  ModelDept = ModelDept,
+  ModelDescription = ModelDescription,
+  TotalTime = End,
+  DataAcquistionElapsed = loadtime[3],
+  ModelingElapsed = Modeltime[3],
+  RecordsProcessed = rc,
+  PredictionsMean = '' ,
+  PredictionsMedian =  '',
+  PredictionsSD =  '',
+  ClassificationResults = rpt)
+
+row.names(input) <- 1:nrow(input)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 https://www.datacamp.com/community/tutorials/the-importance-of-preprocessing-in-data-science-and-the-machine-learning-pipeline-ii-centering-scaling-and-logistic-regression
 
